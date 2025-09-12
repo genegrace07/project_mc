@@ -61,8 +61,11 @@ class Order:
                 print('❌ Invalid input')
                 continue
     def list_order(self):
+        order_number = 0
         o = self.order_lists[-1]
-        self.stored = {"no":len(self.order_lists),"item":o[1],"price":o[2],"count":self.counts}
+        numbering = len(self.order_lists)
+        self.stored = {"no":numbering,"item":o[1],"price":o[2],"count":self.counts}
+        numbering[0]
         self.order_storage.append(self.stored)
         with open('order_lists.json','w') as f:
             json.dump(self.order_storage,f,indent=4)
@@ -70,7 +73,7 @@ class Order:
 
         # for num,o in enumerate(self.order_lists):
         #     self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
-        #     self.order_storage.append(self.stored)
+        # self.order_storage.append(self.stored)
         # with open('order_lists.json','w') as f:
         #     json.dump(self.order_storage,f,indent=4)
         # self.view_order()
@@ -111,6 +114,7 @@ class Order:
                     self.order_storage.pop(remove_item-1)
                     self.total_price = 0
                     self.total_items = 0
+
                     #print(self.order_storage) #for out put checking only
                     with open('order_lists.json','w+') as f:
                         json.dump(self.order_storage,f,indent=4)
@@ -124,9 +128,11 @@ class Order:
                         print(f'Sub Total: ${self.total_price:,.2f}')
                         print(f'Total Items: {self.total_items} ')
                         print()
+                        self.orders()
                         self.total_price = 0
                         self.total_items = 0
-                        is_running = False
+                        #is_running = False
+
                 else:
                     print('Not found ❌')
             except ValueError:
@@ -254,6 +260,7 @@ if __name__ == "__main__":
         #pay1.discount()
         pay1.cal_tax()
         pay1.cash()
+        pay1.order_again()
     else:
         print('\nExiting...\n')
 
