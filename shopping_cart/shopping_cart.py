@@ -8,12 +8,12 @@ import time
 
 class Order:
     def __init__(self,numbers=None,counts=None,stored=None):
-        self.numbers = numbers
+        #self.numbers = numbers
         self.counts = counts
         self.stored = stored
         self.menu_lists = []
         self.counts = 0
-        self.numbers = 0
+        #self.numbers = 0
         self.order_lists = []
         self.order_storage = []
         self.total_price = 0
@@ -28,9 +28,10 @@ class Order:
         print(f"{'NO.'}{'📃 ITEM':>17}{'💲PRICE':>20}")
         print('-' * 48)
         for num, l1 in enumerate(self.lists):
-            menulists1 = num + 1, l1['item'], l1['price']
+            menulists1 = {"no":num +1,"item":l1["item"], "price":l1["price"]}
             self.menu_lists.append(menulists1)
             print(f"{num + 1:<10}       {l1['item']:<15}      ${str(l1['price']):<9}")
+        #print(self.menu_lists) ##checkoutput
         print()
     def orders(self,customer_orders=None):
         while True:
@@ -39,8 +40,8 @@ class Order:
                 self.order_storage.clear()
                 break
             elif customer_orders == 'd':
-                if len(self.order_lists) == 0:
-                #if len(self.order_storage) == 0:
+                #if len(self.order_lists) == 0:
+                if len(self.order_storage) == 0:
                     print('Cart is empty 🛒')
                     continue
                 else:
@@ -53,24 +54,38 @@ class Order:
                 customer_orders = int(customer_orders)
                 self.counts = int(input('Count: '))
                 if 1 <= customer_orders <= len(self.menu_lists):
-                    #self.order_storage.append(self.menu_lists[customer_orders - 1])
-                    self.order_lists.append(self.menu_lists[customer_orders-1])
-                    self.list_order()
+                    self.order_storage.append(self.menu_lists[customer_orders -1])
+                    #print(self.order_storage) ##check output
+                    for num,l in enumerate(self.order_storage):
+                        self.stored = {"no":num +1,"item":l["item"], "price":l["price"],"count":self.counts}
+                        self.order_lists.append(self.stored)
+                        self.order_storage = self.order_lists
+                    print(self.stored)
+
+                    # l = self.order_storage[-1]
+                    # num = len(self.order_storage)
+                    # self.stored = {"no":num +1,"item":l["item"], "price":l["price"],"count":self.counts}
+                    # self.order_lists.append(self.stored)
+                    # self.order_storage = self.order_lists
+                    # with open('order_lists.json', 'w') as f:
+                    #     json.dump(self.stored, f, indent=4)
+                    self.view_order()
+
                 else:
                     print(f'❌ Invalid, {customer_orders} Not found')
             except ValueError:
                 print('❌ Invalid input')
                 continue
-    def list_order(self):
-        o = self.order_lists[-1]
-        #o = self.order_storage[-1]
-        #numbering = len(self.order_lists)
-        numbering = len(self.order_storage)
-        self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
-        self.order_storage.append(self.stored)
-        with open('order_lists.json','w') as f:
-            json.dump(self.order_storage,f,indent=4)
-        self.view_order()
+    # def list_order(self):
+    #     #o = self.order_lists[-1]
+    #     o = self.order_storage[-1]
+    #     #numbering = len(self.order_lists)
+    #     numbering = len(self.order_storage)
+    #     self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
+    #     self.order_storage.append(self.stored)
+    #     with open('order_lists.json','w') as f:
+    #         json.dump(self.order_storage,f,indent=4)
+    #     self.view_order()
 
         # for num,o in enumerate(self.order_lists):
         #     self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
@@ -84,11 +99,10 @@ class Order:
                 print("=============== Orders =============")
                 print('                Empty               ')
             else:
-                self.total_price = 0
-                self.total_items = 0
-                with open('order_lists.json','r') as f:
-                    #save_orders = json.load(f)
-                    try:
+                # self.total_price = 0
+                # self.total_items = 0
+                try:
+                    with open('order_lists.json', 'r') as f:
                         save_orders = json.load(f)
                         print("\n==================== Shopping Cart =====================")
                         print(f'{"ITEM":>8}{"PRICE":>20}{"QTY":>10}{"TOTAL":>13} ')
@@ -100,8 +114,10 @@ class Order:
                         print(f'Sub Total: ${self.total_price:,.2f}')
                         print(f'Total Items: {self.total_items} ')
                         print()
-                    except:
-                        print('Invalid, Not found')
+
+                except:
+                    print('Invalid, Not found')
+
         else:
             print('File not found')
     def delete_order(self):
@@ -235,7 +251,8 @@ class Payment(Vat):
         while True:
             again = input('Enter another order (y/n): ').lower().strip()
             if again == 'y':
-                self.order_lists.clear()
+                #self.order_lists.clear()
+                self.order_storage.clear()
                 self.menus()
                 self.orders()
                 self.discount()
