@@ -32,7 +32,6 @@ class Order:
             self.menu_lists.append(menulists1)
             print(f"{num + 1:<10}       {l1['item']:<15}      ${str(l1['price']):<9}")
         print()
-
     def orders(self,customer_orders=None):
         while True:
             customer_orders = input('Number to add to cart🛒, "d"/delete, "q"/done: ')
@@ -41,6 +40,7 @@ class Order:
                 break
             elif customer_orders == 'd':
                 if len(self.order_lists) == 0:
+                #if len(self.order_storage) == 0:
                     print('Cart is empty 🛒')
                     continue
                 else:
@@ -53,6 +53,7 @@ class Order:
                 customer_orders = int(customer_orders)
                 self.counts = int(input('Count: '))
                 if 1 <= customer_orders <= len(self.menu_lists):
+                    #self.order_storage.append(self.menu_lists[customer_orders - 1])
                     self.order_lists.append(self.menu_lists[customer_orders-1])
                     self.list_order()
                 else:
@@ -61,11 +62,11 @@ class Order:
                 print('❌ Invalid input')
                 continue
     def list_order(self):
-        order_number = 0
         o = self.order_lists[-1]
-        numbering = len(self.order_lists)
-        self.stored = {"no":numbering,"item":o[1],"price":o[2],"count":self.counts}
-        numbering[0]
+        #o = self.order_storage[-1]
+        #numbering = len(self.order_lists)
+        numbering = len(self.order_storage)
+        self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
         self.order_storage.append(self.stored)
         with open('order_lists.json','w') as f:
             json.dump(self.order_storage,f,indent=4)
@@ -77,7 +78,6 @@ class Order:
         # with open('order_lists.json','w') as f:
         #     json.dump(self.order_storage,f,indent=4)
         # self.view_order()
-
     def view_order(self):
         if os.path.exists('order_lists.json'):
             if os.path.getsize('order_lists.json') == 0:
@@ -106,6 +106,7 @@ class Order:
         else:
             print('File not found')
     def delete_order(self):
+        new_lists1 = []
         is_running = True
         while is_running:
             try:
@@ -114,25 +115,24 @@ class Order:
                     self.order_storage.pop(remove_item-1)
                     self.total_price = 0
                     self.total_items = 0
-
-                    #print(self.order_storage) #for out put checking only
-                    with open('order_lists.json','w+') as f:
+                    #print(self.order_storage)
+                    with open('order_lists.json','w') as f:
                         json.dump(self.order_storage,f,indent=4)
-                        print("\n==================== Shopping Cart =====================")
-                        print(f'{"ITEM":>8}{"PRICE":>20}{"QTY":>10}{"TOTAL":>13} ')
-                        for num, v in enumerate(self.order_storage):
-                            print(f'{num+1:<3} {v["item"].ljust(19)}${v["price"]:<12,.2f}{str(v["count"]).ljust(8)} ${v["count"] * v["price"]:,.2f}')
-                            self.total_price += int(v["count"]) * int(v["price"])
-                            self.total_items += int(v["count"])
-                        print('========================================================')
-                        print(f'Sub Total: ${self.total_price:,.2f}')
-                        print(f'Total Items: {self.total_items} ')
+                    with open('order_lists.json','r') as f:
+                        remaining = json.load(f)
+                        # print(remaining) #to test the output
                         print()
-                        self.orders()
-                        self.total_price = 0
-                        self.total_items = 0
-                        #is_running = False
+                    for num, l in enumerate(remaining):
+                        new_lists = {"no":num +1,"item":l['item'],"price":l['price'],"count":l['count']}
+                        new_lists1.append(new_lists)
+                    self.order_storage = new_lists1
+                    # print(new_lists1) #to test the output
+                    with open('order_lists.json','w') as f:
 
+                        json.dump(new_lists1,f,indent=4)
+                    self.view_order()
+                    self.orders()
+                    ##NUMBERING SEQUENCE NOT RIGHT AFTER DELETION
                 else:
                     print('Not found ❌')
             except ValueError:
