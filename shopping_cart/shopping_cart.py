@@ -34,10 +34,18 @@ class Order:
         print()
     def orders(self,customer_orders=None):
         while True:
-            customer_orders = input('Number to add to cart🛒, "d"/delete, "q"/done: ')
-            if customer_orders == 'q':
-                self.order_storage.clear()
+            customer_orders = input('Number to add to cart🛒,"c"/exit, "d"/delete, "q"/done: ')
+            if customer_orders == 'c':
                 break
+            elif customer_orders == 'q':
+                if self.order_storage:
+                    if input('Proceed to checkout?(y) or any key to cancel: ').lower().strip() == "y":
+                        break
+                    else:
+                        print('Transaction canceled')
+
+                else:
+                    break
             elif customer_orders == 'd':
                 if len(self.order_lists) == 0:
                 #if len(self.order_storage) == 0:
@@ -102,7 +110,6 @@ class Order:
                         print()
                     except:
                         print('Invalid, Not found')
-
         else:
             print('File not found')
     def delete_order(self):
@@ -253,11 +260,11 @@ if __name__ == "__main__":
     pay1 = Payment()
     pay1.menus()
     pay1.orders()
-    pay1.discount()
-    pay1.cal_tax()
+    # pay1.discount()
+    # pay1.cal_tax()
 
     if pay1.total_price > 0:
-        #pay1.discount()
+        pay1.discount()
         pay1.cal_tax()
         pay1.cash()
         pay1.order_again()
