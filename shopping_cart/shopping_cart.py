@@ -1,4 +1,5 @@
 #shopping cart v2
+#this is modify2/branch
 
 import json
 import os
@@ -70,22 +71,24 @@ class Order:
                 print('❌ Invalid input')
                 continue
     def list_order(self):
-        o = self.order_lists[-1]
-        #o = self.order_storage[-1]
-        #numbering = len(self.order_lists)
-        numbering = len(self.order_storage)
-        self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
+        # o = self.order_lists[-1]
+        # #o = self.order_storage[-1]
+        # #numbering = len(self.order_lists)
+        # numbering = len(self.order_storage)
+        # self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
+        # self.order_storage.append(self.stored)
+        # with open('order_lists.json','w') as f:
+        #     json.dump(self.order_storage,f,indent=4)
+        # self.view_order()
+
+        for num,o in enumerate(self.order_lists):
+            self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
         self.order_storage.append(self.stored)
         with open('order_lists.json','w') as f:
             json.dump(self.order_storage,f,indent=4)
         self.view_order()
 
-        # for num,o in enumerate(self.order_lists):
-        #     self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
-        # self.order_storage.append(self.stored)
-        # with open('order_lists.json','w') as f:
-        #     json.dump(self.order_storage,f,indent=4)
-        # self.view_order()
+
     def view_order(self):
         if os.path.exists('order_lists.json'):
             if os.path.getsize('order_lists.json') == 0:
@@ -123,22 +126,30 @@ class Order:
                     self.total_price = 0
                     self.total_items = 0
                     #print(self.order_storage)
+                    for num, l in enumerate(self.order_storage):
+                        remainings = {"no":num +1,"item":l["item"],"price":l["price"],"count":l["count"]}
+                    new_lists1.append(remainings)
+                    self.order_storage = []
                     with open('order_lists.json','w') as f:
-                        json.dump(self.order_storage,f,indent=4)
-                    with open('order_lists.json','r') as f:
-                        remaining = json.load(f)
-                        # print(remaining) #to test the output
-                        print()
+                        json.dump(remainings,f,indent=4)
                     for num, l in enumerate(remaining):
                         new_lists = {"no":num +1,"item":l['item'],"price":l['price'],"count":l['count']}
                         new_lists1.append(new_lists)
-                    self.order_storage = new_lists1
-                    # print(new_lists1) #to test the output
-                    with open('order_lists.json','w') as f:
-
-                        json.dump(new_lists1,f,indent=4)
                     self.view_order()
-                    self.orders()
+                    # with open('order_lists.json','r') as f:
+                    #     remaining = json.load(f)
+                    #     # print(remaining) #to test the output
+                    #     print()
+                    # for num, l in enumerate(remaining):
+                    #     new_lists = {"no":num +1,"item":l['item'],"price":l['price'],"count":l['count']}
+                    #     new_lists1.append(new_lists)
+                    # self.order_storage = new_lists1
+                    # # print(new_lists1) #to test the output
+                    # with open('order_lists.json','w') as f:
+                    #
+                    #     json.dump(new_lists1,f,indent=4)
+                    # self.view_order()
+                    # self.orders()
                     ##NUMBERING SEQUENCE NOT RIGHT AFTER DELETION
                 else:
                     print('Not found ❌')

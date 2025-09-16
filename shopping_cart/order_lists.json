@@ -1,26 +1,6 @@
-[
-    {
-        "no": 1,
-        "item": "Bread",
-        "price": 50,
-        "count": 4
-    },
-    {
-        "no": 2,
-        "item": "Cheese",
-        "price": 150,
-        "count": 6
-    },
-    {
-        "no": 3,
-        "item": "Ground beef",
-        "price": 180,
-        "count": 5
-    },
-    {
-        "no": 4,
-        "item": "Bread",
-        "price": 50,
-        "count": 2
-    }
-]
+{
+    "no": 4,
+    "item": "Butter",
+    "price": 120,
+    "count": 3
+}
