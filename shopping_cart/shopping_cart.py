@@ -1,5 +1,6 @@
 #shopping cart v2
 #this is modify2/branch
+#just a mark for last update
 
 import json
 import os
@@ -64,11 +65,14 @@ class Order:
                 if 1 <= customer_orders <= len(self.menu_lists):
                     #self.order_storage.append(self.menu_lists[customer_orders - 1])
                     self.order_lists.append(self.menu_lists[customer_orders-1])
-                    print(self.order_lists)
+
                     for num, l in enumerate(self.order_lists):
                         remainings = {"no":num+1,"item":l["item"],"price":l["price"],"count":self.counts}
                     self.order_storage.append(remainings)
-                    print(self.order_storage)
+
+                    with open('order_lists.json','w') as f:
+                        json.dump(self.order_storage,f,indent=4)
+
                     self.view_order()
                 else:
                     print(f'❌ Invalid, {customer_orders} Not found')
@@ -126,6 +130,7 @@ class Order:
             print('File not found')
     def delete_order(self):
         new_lists = []
+        final_lists = []
         is_running = True
         #while is_running:
         try:
@@ -135,10 +140,14 @@ class Order:
                 self.total_price = 0
                 self.total_items = 0
                 for num, l in enumerate(self.order_storage):
-                    remainings = {"no":num +1,"item":l["item"],"price":l["price"],"count":l["count"]}
+                    remainings = {"item":l["item"],"price":l["price"],"count":l["count"]}
                     new_lists.append(remainings)
+                for num, l in enumerate(new_lists):
+                    remainings = {"no":num +1,"item": l["item"], "price": l["price"], "count": l["count"]}
+                    final_lists.append(remainings)
+                new_lists = final_lists
                 self.order_storage = new_lists
-                self.order_lists = new_lists
+                #self.order_lists = new_lists
                     # self.order_storage.clear()
                 with open('order_lists.json','w') as f:
                     json.dump(self.order_storage,f,indent=4)

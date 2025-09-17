@@ -1,0 +1,38 @@
+[
+    {
+        "no": 1,
+        "item": "Bread",
+        "price": 50,
+        "count": 4
+    },
+    {
+        "no": 2,
+        "item": "Ground beef",
+        "price": 180,
+        "count": 8
+    },
+    {
+        "no": 3,
+        "item": "Butter",
+        "price": 120,
+        "count": 5
+    },
+    {
+        "no": 6,
+        "item": "Bread",
+        "price": 50,
+        "count": 4
+    },
+    {
+        "no": 7,
+        "item": "Cheese",
+        "price": 150,
+        "count": 6
+    },
+    {
+        "no": 8,
+        "item": "Ground beef",
+        "price": 180,
+        "count": 8
+    }
+]
