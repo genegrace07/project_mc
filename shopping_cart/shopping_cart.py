@@ -63,8 +63,10 @@ class Order:
                 if 1 <= customer_orders <= len(self.menu_lists):
                     #self.order_storage.append(self.menu_lists[customer_orders - 1])
                     self.order_lists.append(self.menu_lists[customer_orders-1])
-                    self.list_order()
-                    print(self.order_lists)
+                    for num, l in enumerate(self.order_lists):
+                        remainings = {"no":num+1,"item":l[1],"price":l[2],"count":self.counts}
+                    self.order_storage.append(remainings)
+                    self.view_order()
                 else:
                     print(f'❌ Invalid, {customer_orders} Not found')
             except ValueError:
