@@ -35,6 +35,22 @@ class Order:
             print(f"{num + 1:<10}       {l1['item']:<15}      ${str(l1['price']):<9}")
         #print(self.menu_lists) ##checkoutput
         print()
+
+    def renumber(self):
+        tuple_lists = []
+        dict_lists = []
+        for l in self.order_storage:
+            tuple_output = (l["item"],l["price"],l["count"])
+            tuple_lists.append(tuple_output)
+        for num, l in enumerate(tuple_lists):
+            remainings = {"no": num + 1, "item": l[0], "price": l[1], "count": self.counts}
+            dict_lists.append(remainings)
+        self.order_storage = dict_lists
+        print(dict_lists)
+        print(self.order_storage)
+        with open("order_lists.json","w") as f:
+            json.dump(self.order_storage,f,indent=4)
+
     def orders(self,customer_orders=None):
         while True:
             customer_orders = input('Number to add to cart🛒,"c"/exit, "d"/delete, "q"/done: ')
@@ -63,16 +79,13 @@ class Order:
                 customer_orders = int(customer_orders)
                 self.counts = int(input('Count: '))
                 if 1 <= customer_orders <= len(self.menu_lists):
-                    #self.order_storage.append(self.menu_lists[customer_orders - 1])
                     self.order_lists.append(self.menu_lists[customer_orders-1])
-
                     for num, l in enumerate(self.order_lists):
                         remainings = {"no":num+1,"item":l["item"],"price":l["price"],"count":self.counts}
                     self.order_storage.append(remainings)
-
-                    with open('order_lists.json','w') as f:
-                        json.dump(self.order_storage,f,indent=4)
-
+                    self.renumber()
+                    # with open('order_lists.json','w') as f:
+                    #     json.dump(self.order_storage,f,indent=4)
                     self.view_order()
                 else:
                     print(f'❌ Invalid, {customer_orders} Not found')
@@ -139,18 +152,20 @@ class Order:
                 self.order_storage.pop(remove_item-1)
                 self.total_price = 0
                 self.total_items = 0
+                #print(self.order_storage)
+                new_lists.clear()
                 for num, l in enumerate(self.order_storage):
                     remainings = {"item":l["item"],"price":l["price"],"count":l["count"]}
                     new_lists.append(remainings)
                 for num, l in enumerate(new_lists):
                     remainings = {"no":num +1,"item": l["item"], "price": l["price"], "count": l["count"]}
                     final_lists.append(remainings)
-                new_lists = final_lists
-                self.order_storage = new_lists
+                    print(final_lists)
+                self.order_storage = final_lists
                 #self.order_lists = new_lists
                     # self.order_storage.clear()
                 with open('order_lists.json','w') as f:
-                    json.dump(self.order_storage,f,indent=4)
+                    json.dump(final_lists,f,indent=4)
                 self.view_order()
                 self.orders()
 
