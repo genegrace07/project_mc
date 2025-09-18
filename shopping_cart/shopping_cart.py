@@ -122,8 +122,8 @@ class Order:
                 print("=============== Orders =============")
                 print('                Empty               ')
             else:
-                # self.total_price = 0
-                # self.total_items = 0
+                self.total_price = 0
+                self.total_items = 0
                 try:
                     with open('order_lists.json', 'r') as f:
                         save_orders = json.load(f)
