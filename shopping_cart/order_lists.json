@@ -1,32 +1,20 @@
 [
     {
         "no": 1,
-        "item": "Eggs",
-        "price": 90,
-        "count": 4
+        "item": "Butter",
+        "price": 120,
+        "count": 3
     },
     {
         "no": 2,
         "item": "Butter",
         "price": 120,
-        "count": 4
+        "count": 5
     },
     {
         "no": 3,
-        "item": "Eggs",
-        "price": 90,
-        "count": 4
-    },
-    {
-        "no": 4,
-        "item": "Bread",
-        "price": 50,
-        "count": 4
-    },
-    {
-        "no": 5,
         "item": "Chicken breast",
         "price": 220,
-        "count": 4
+        "count": 76
     }
 ]
