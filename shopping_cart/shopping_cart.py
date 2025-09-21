@@ -57,12 +57,15 @@ class Order:
             if customer_orders == 'c':
                 break
             elif customer_orders == 'q':
-                if self.order_storage:
-                    if input('Proceed to checkout?(y) or any key to cancel: ').lower().strip() == "y":
+                if len(self.order_storage) == 0:
+                    print('Cart is empty 🛒')
+                    continue
+                elif self.order_storage:
+                    if input('Proceed to checkout?(y) or any key to add another order: ').lower().strip() == "y":
                         break
                     else:
                         print('Transaction canceled')
-
+                        continue
                 else:
                     break
             elif customer_orders == 'd':
@@ -124,6 +127,8 @@ class Order:
                 try:
                     with open('order_lists.json', 'r') as f:
                         save_orders = json.load(f)
+                        os.system('cls')
+                        self.menus()
                         print("\n==================== Shopping Cart =====================")
                         print(f'{"ITEM":>8}{"PRICE":>20}{"QTY":>10}{"TOTAL":>13} ')
                         for v in save_orders:
@@ -151,6 +156,7 @@ class Order:
                 self.orders()
             else:
                 print('Not found ❌')
+                self.delete_order()
         except ValueError:
             print('Invalid ❌')
 
