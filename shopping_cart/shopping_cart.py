@@ -3,27 +3,30 @@
 #just a mark for last update 09182025 0944
 
 '''
-error on count
+The fix (concept only, no code):
+Instead of looping through self.order_storage and then appending again:
+Take the selected menu item.
+Create a new dictionary with its name, price, and the count the customer typed.
+Append that one dictionary directly into self.order_storage.
+No loop needed here. The loop is only for renumbering later, not when adding.
+👉 In short:
+Remove the loop.
+Build remainings (or whatever you call it) from the selected menu item + count.
+Append it once.
 '''
 
 import json
 import os
 import time
-
-#menu_lists = []
-
 class Order:
     def __init__(self,numbers=None,counts=None,stored=None):
-        #self.numbers = numbers
         self.counts = counts
         self.stored = stored
         self.menu_lists = []
         self.counts = 0
-        #self.numbers = 0
         self.order_lists = []
         self.order_storage = []
         self.total_price = 0
-        #self.subtotal = 0
         self.total_items = 0
 
         with open('cart_list.json', 'r') as f:
@@ -37,26 +40,18 @@ class Order:
             menulists1 = {"no":num +1,"item":l1["item"], "price":l1["price"]}
             self.menu_lists.append(menulists1)
             print(f"{num + 1:<10}       {l1['item']:<15}      ${str(l1['price']):<9}")
-        #print(self.menu_lists) ##checkoutput
         print()
 
     def renumber(self):
-        #tuple_lists = []
         dict_lists = []
-        # for l in self.order_storage:
-        #     tuple_output = (l["item"],l["price"],l["count"])
-        #     tuple_lists.append(tuple_output)
         for num, l in enumerate(self.order_storage):
             remainings2 = {"no": num + 1, "item": l["item"], "price": l["price"], "count":l["count"]}
             dict_lists.append(remainings2)
         self.order_storage = dict_lists
-        # print(dict_lists)
-        # print(self.order_storage)
         with open("order_lists.json","w") as f:
             json.dump(self.order_storage,f,indent=4)
 
     def orders(self,customer_orders=None):
-        temp_newlist = []
         while True:
             customer_orders = input('Number to add to cart🛒,"c"/exit, "d"/delete, "q"/done: ')
             if customer_orders == 'c':
@@ -84,14 +79,9 @@ class Order:
                 customer_orders = int(customer_orders)
                 self.counts = int(input('Count: '))
                 if 1 <= customer_orders <= len(self.menu_lists):
-                    self.order_storage.append(self.menu_lists[customer_orders-1])
-                    for num, l in enumerate(self.order_storage):
-                        remainings = {"no":num+1,"item":l["item"],"price":l["price"],"count":self.counts}
+                    get_order = self.menu_lists[customer_orders - 1]
+                    remainings = {"item":get_order["item"], "price":get_order["price"], "count": self.counts}
                     self.order_storage.append(remainings)
-                    #self.order_storage = temp_newlist
-                    # with open('order_lists.json','w') as f:
-                    #     json.dump(self.order_storage,f,indent=4)
-                    #print(self.order_storage) ##output check
                     self.renumber()
                     self.view_order()
                 else:
@@ -149,51 +139,16 @@ class Order:
         else:
             print('File not found')
     def delete_order(self):
-        new_lists = []
-        final_lists = []
-        is_running = True
-        #while is_running:
         try:
             remove_item = int(input('Remove item: '))
             if 1 <= remove_item <= len(self.order_storage):
                 self.order_storage.pop(remove_item-1)
                 self.total_price = 0
                 self.total_items = 0
-                new_lists.clear()
-                # with open('order_lists.json','w') as f:
-                #     json.dump(self.order_storage,f,indent=4)
+
                 self.renumber()
-                # for num, l in enumerate(self.order_storage):
-                #     remainings = {"item":l["item"],"price":l["price"],"count":l["count"]}
-                #     new_lists.append(remainings)
-                # for num, l in enumerate(new_lists):
-                #     remainings = {"no":num +1,"item": l["item"], "price": l["price"], "count": l["count"]}
-                #     final_lists.append(remainings)
-                #     print(final_lists)
-                # self.order_storage = final_lists
-                # with open('order_lists.json','w') as f:
-                #     json.dump(final_lists,f,indent=4)
                 self.view_order()
                 self.orders()
-
-                # with open('order_lists.json','r') as f:
-                #     remainings2 = json.load(f)
-                # print(remainings2)
-                # self.view_order()
-
-                #     # print(remaining) #to test the output
-                #     print()
-                # for num, l in enumerate(remaining):
-                #     new_lists = {"no":num +1,"item":l['item'],"price":l['price'],"count":l['count']}
-                #     new_lists1.append(new_lists)
-                # self.order_storage = new_lists1
-                # # print(new_lists1) #to test the output
-                # with open('order_lists.json','w') as f:
-                #
-                #     json.dump(new_lists1,f,indent=4)
-                # self.view_order()
-                # self.orders()
-                ##NUMBERING SEQUENCE NOT RIGHT AFTER DELETION
             else:
                 print('Not found ❌')
         except ValueError:
@@ -227,7 +182,6 @@ class Discount(Order):
                  break
             else:
                 print('Invalid ❌')
-
 class Vat(Discount):
     def __init__(self,vat=0,grandtotal=0):
         super().__init__(total_discount_price=None,total_discount=None,discount_type=None,have_discount=None)
@@ -243,9 +197,7 @@ class Payment(Vat):
         super().__init__(vat=0,grandtotal=0)
     def cash(self,userpayment=None):
         discount_type_output = self.discount_type_list[self.discount_type]
-        #self.cal_tax()
         self.view_order()
-        #print(f'\nDiscount({discount_type_output * 100:.0f}%): -${self.total_discount:,.2f}')
         print(f'Discount({discount_type_output * 100:.0f}%):-${self.total_discount:,.2f}'
               if discount_type_output > 0 else 'Discount:(N/A)')
         print(f'Tax(5%): ${self.vat:.2f}')
@@ -273,7 +225,6 @@ class Payment(Vat):
 
                     if self.discount_type in self.discount_type_list:
                         discount_type_output = self.discount_type_list[self.discount_type]
-                        #print(f'Discount({discount_type_output*100:.0f}%): -${self.total_discount:,.2f}')
                         print(f'Discount({discount_type_output * 100:.0f}%):-${self.total_discount:,.2f}'
                               if discount_type_output > 0 else 'Discount:(N/A)')
                     else:
@@ -297,7 +248,6 @@ class Payment(Vat):
         while True:
             again = input('Enter another order (y/n): ').lower().strip()
             if again == 'y':
-                #self.order_lists.clear()
                 self.order_storage.clear()
                 self.menus()
                 self.orders()
@@ -315,9 +265,6 @@ if __name__ == "__main__":
     pay1 = Payment()
     pay1.menus()
     pay1.orders()
-    # pay1.discount()
-    # pay1.cal_tax()
-
     if pay1.total_price > 0:
         pay1.discount()
         pay1.cal_tax()
