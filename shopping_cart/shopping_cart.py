@@ -1,18 +1,9 @@
 #shopping cart v2
-#this is modify2/branch
-#just a mark for last update 09182025 0944
+#this is modify3/branch
+#just a mark for last update 09212025 1905
 
 '''
-The fix (concept only, no code):
-Instead of looping through self.order_storage and then appending again:
-Take the selected menu item.
-Create a new dictionary with its name, price, and the count the customer typed.
-Append that one dictionary directly into self.order_storage.
-No loop needed here. The loop is only for renumbering later, not when adding.
-👉 In short:
-Remove the loop.
-Build remainings (or whatever you call it) from the selected menu item + count.
-Append it once.
+
 '''
 
 import json
@@ -92,30 +83,6 @@ class Order:
             except ValueError:
                 print('❌ Invalid input')
                 continue
-    # def list_order(self):
-    #     # o = self.order_lists[-1]
-    #     # #o = self.order_storage[-1]
-    #     # #numbering = len(self.order_lists)
-    #     # numbering = len(self.order_storage)
-    #     # self.stored = {"no":numbering+1,"item":o[1],"price":o[2],"count":self.counts}
-    #     # self.order_storage.append(self.stored)
-    #     # with open('order_lists.json','w') as f:
-    #     #     json.dump(self.order_storage,f,indent=4)
-    #     # self.view_order()
-    #
-    #     for num,o in enumerate(self.order_lists):
-    #         self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
-    #     self.order_storage.append(self.stored)
-    #     with open('order_lists.json','w') as f:
-    #         json.dump(self.order_storage,f,indent=4)
-    #     self.view_order()
-    #
-    #     # for num,o in enumerate(self.order_lists):
-    #     #     self.stored = {"no":num+1,"item":o[1],"price":o[2],"count":self.counts}
-    #     # self.order_storage.append(self.stored)
-    #     # with open('order_lists.json','w') as f:
-    #     #     json.dump(self.order_storage,f,indent=4)
-    #     # self.view_order()
     def view_order(self):
         if os.path.exists('order_lists.json'):
             if os.path.getsize('order_lists.json') == 0:
@@ -139,8 +106,8 @@ class Order:
                         print(f'Sub Total: ${self.total_price:,.2f}')
                         print(f'Total Items: {self.total_items} ')
                         print()
-                except:
-                    print('Invalid, Not found')
+                except json.JSONDecodeError:
+                    print('⚠ Invalid, Not found')
         else:
             print('File not found')
     def delete_order(self):

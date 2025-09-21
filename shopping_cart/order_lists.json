@@ -1,9 +1,9 @@
 [
     {
         "no": 1,
-        "item": "Butter",
-        "price": 120,
-        "count": 5
+        "item": "Bread",
+        "price": 50,
+        "count": 4
     },
     {
         "no": 2,
@@ -13,38 +13,14 @@
     },
     {
         "no": 3,
-        "item": "Ground beef",
-        "price": 180,
-        "count": 8
+        "item": "Butter",
+        "price": 120,
+        "count": 5
     },
     {
         "no": 4,
-        "item": "Chicken breast",
-        "price": 220,
-        "count": 5
-    },
-    {
-        "no": 5,
-        "item": "Chicken breast",
-        "price": 220,
-        "count": 5
-    },
-    {
-        "no": 6,
-        "item": "Butter",
-        "price": 120,
-        "count": 5
-    },
-    {
-        "no": 7,
-        "item": "Chicken breast",
-        "price": 220,
-        "count": 7
-    },
-    {
-        "no": 8,
-        "item": "Butter",
-        "price": 120,
-        "count": 3
+        "item": "Bread",
+        "price": 50,
+        "count": 4
     }
 ]
