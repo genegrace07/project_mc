@@ -1,6 +1,7 @@
 #shopping cart v2
-#this is modify3/branch
-#just a mark for last update 09212025 1905
+#this is modify2/branch
+#just a mark for last update 09252025 2058
+#for mysql connection
 
 '''
 
